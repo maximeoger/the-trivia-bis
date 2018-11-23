@@ -7,11 +7,6 @@ class CategoryContainer extends Component {
     category: null, currentQuestion: 0
   };
 
-
-  async componentDidMount() {
-    const data = await api.getCategoryById(this.props.match.params.id);
-  }
-
   // createRef in order to bring back input value to its parent
   answerInput = createRef();
 
@@ -23,10 +18,7 @@ class CategoryContainer extends Component {
       category: data,
     });
 
-    const currentCategory = api.getItem(this.state.category.id);
-    this.setState({
-      answered: currentCategory,
-    });
+    console.log(data);
   }
 
   handleSubmit = (e) => {
