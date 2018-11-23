@@ -5,7 +5,7 @@ import Category from './Category';
 class CategoryContainer extends Component {
   state = {
     category: null,
-  }
+  };
   
 
   async componentDidMount() {
@@ -13,6 +13,11 @@ class CategoryContainer extends Component {
     this.setState({
       category: data,
     });
+
+    const currentCategory = api.getItem(this.state.category.id);
+      this.setState({
+          answered: currentCategory,
+      });
   }
 
   render() {
@@ -20,6 +25,7 @@ class CategoryContainer extends Component {
       <Category
         categoryName={this.props.match.params.id}
         category={this.state.category}
+        answered={this.state.answered}
       />
     );
   }

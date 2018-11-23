@@ -5,7 +5,11 @@ import PropTypes from 'prop-types';
 const Home = ({ categories }) => (
   <section>
     <h1>QuizzMe</h1>
-      <Link to={"/category"}>Play</Link>
+      { categories.length > 0 && (
+          categories.map(category => (
+              <Link key={`/category/${category.id}`} to={`/category/${category.id}`}>{category.title}</Link>
+          ))
+          )}
   </section>
 );
 
@@ -17,6 +21,6 @@ Home.propTypes = {
       clues_count: PropTypes.number
     }),
   ),
-}
+};
 
 export default Home;

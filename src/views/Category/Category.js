@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Category = ({ categoryName, category }) => (
+const Category = ({ categoryName, category, answer}) => (
   <section>
       {category && (
           <span>
@@ -9,10 +9,11 @@ const Category = ({ categoryName, category }) => (
 
               {category.clues.length > 0 && (
                   category.clues.map(clue => (
-                      <div>
-                          <p key={clue.id}>{clue.question}</p>
-                          <input type="text" className={"answer"}/>
-                      </div>
+                          <div key={clue.id}>
+                              <p key={clue.id}>{clue.question}</p>
+                              <input type="text" className={"answer"}/>
+                          </div>
+
                   ))
               )}
 

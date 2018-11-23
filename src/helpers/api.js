@@ -15,7 +15,8 @@ class api {
   }
 
   getItem(key){
-      return JSON.parse(localStorage.getItem(key));
+      let storage = localStorage.getItem(key);
+      return storage ? JSON.parse(storage) : [];
   }
 }
 
