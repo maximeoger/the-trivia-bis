@@ -7,15 +7,12 @@ class HomeContainer extends Component {
     categories: [],
   }
 
-    async componentDidMount() {
-        const data = await api.getCategories(this.props.match.params.id);
-        this.setState({
-            categories: data,
-        });
-        console.log(this.state);
-    }
-
-
+  async componentDidMount() {
+    const data = await api.getCategories();
+    this.setState({
+      categories: data,
+    });
+  }
 
   render() {
     return (

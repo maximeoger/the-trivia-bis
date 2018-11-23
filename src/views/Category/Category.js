@@ -1,32 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Category = ({ categoryName, category, answer}) => (
-  <section>
-      {category && (
-          <span>
-               <h1>{category.title}</h1>
+const Category = ({ category, currentQuestionIndex, handleSubmit, answerInput }) => {
+  const currentQuestion = category.clues[currentQuestionIndex];
+  return (
+    <section>
+      <form onSubmit={handleSubmit}>
+        <h1>You choosed: {category.title}</h1>
+        <div className="question">
+          <h3 className="question__title">
+            {currentQuestion.question}
+          </h3>
+          <div className="question__answerInput">
+            {/* We give the ref below in order check the value */}
+            <input ref={answerInput} />
+          </div>
+          <button className="question__submit" type="submit">
+            Next
+          </button>
+        </div>
+      </form>
+    </section>
+  );
+};
 
-              {category.clues.length > 0 && (
-                  category.clues.map(clue => (
-                          <div key={clue.id}>
-                              <p key={clue.id}>{clue.question}</p>
-                              <input type="text" className={"answer"}/>
-                          </div>
-
-                  ))
-              )}
-
-              <button id={"Submit"} data-id={category.id}>Submit</button>
-          </span>
-
-      )}
-
-  </section>
-);
 
 Category.propTypes = {
-  categoryName: PropTypes.string.isRequired,
+  category: PropTypes.shape({}).isRequired,
+  currentQuestionIndex: PropTypes.number.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  answerInput: PropTypes.shape({
+    value: PropTypes.instanceOf(HTMLInputElement)
+  }),
 };
 
 export default Category;
