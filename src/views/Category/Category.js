@@ -4,6 +4,9 @@ import styled from 'styled-components';
 
 const Category = ({ category, currentQuestionIndex, handleSubmit, answerInput }) => {
   const currentQuestion = category.clues[currentQuestionIndex];
+
+
+
   return (
     <section>
       <form onSubmit={handleSubmit}>

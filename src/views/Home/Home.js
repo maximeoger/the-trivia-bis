@@ -44,7 +44,7 @@ const Home = ({ categories }) => (
     {categories.length > 0 && (
       <section>
         {categories.map(category => (
-          <Link to={`/categories/${category.id}`} key={category.id}>
+          <Link to={`/category/${category.id}`} key={category.id}>
             <Button>{category.title}</Button>
           </Link>
         ))}
