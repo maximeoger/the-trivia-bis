@@ -5,19 +5,28 @@ import Category from './Category';
 class CategoryContainer extends Component {
   state = {
     category: null,
+    questions: []
   }
-  async componentDidMount() {
+  async componentWillMount() {
     const data = api.getCategoryById(this.props.match.params.id);
-    this.setState({
-      category: data,
-    });
+    const datas = api.getQuestionByCategory(this.props.match.params.id).then(questions =>
+      this.setState({
+        category: data,
+        questions: questions,
+      }),
+    );
   }
-  render() {
+
+  componentDidMount() {
     console.log(this.state);
+  }
+
+  render() {
     return (
       <Category
         categoryName={this.props.match.params.id}
         category={this.state.category}
+        questions={this.state.questions}
       />
     );
   }
