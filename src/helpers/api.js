@@ -16,6 +16,15 @@ class api {
     const json = await response.json();
     return json;
   }
+
+  saveItem(key, item) {
+    localStorage.setItem(key, JSON.stringify(item));
+  }
+
+  getItem(key) {
+    let storage = localStorage.getItem(key);
+    return storage ? JSON.parse(storage) : [];
+  }
 }
 
 export default new api();

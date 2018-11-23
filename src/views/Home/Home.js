@@ -37,6 +37,7 @@ transition: box-shadow 0.25s;
 `
 
 const Home = ({ categories }) => (
+<<<<<<< HEAD
   <Section>
     <Logo>QuizzME</Logo>
     <Title>chose a category to start the quizz</Title>
@@ -50,6 +51,16 @@ const Home = ({ categories }) => (
       </section>
     )}
   </Section>
+=======
+  <section>
+    <h1>QuizzMe</h1>
+      { categories.length > 0 && (
+          categories.map(category => (
+              <Link key={`/category/${category.id}`} to={`/category/${category.id}`}>{category.title}</Link>
+          ))
+          )}
+  </section>
+>>>>>>> d2ecdffda207036cd3849fe3cda11fda0ddfd7b8
 );
 
 Home.propTypes = {
@@ -60,6 +71,6 @@ Home.propTypes = {
       clues_count: PropTypes.number
     }),
   ),
-}
+};
 
 export default Home;

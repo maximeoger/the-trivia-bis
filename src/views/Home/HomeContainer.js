@@ -15,12 +15,10 @@ class HomeContainer extends Component {
       })
     );
   }
+
   render() {
-    return (<
-      Home categories={
-        this.state.categories
-      }
-    />
+    return (
+      <Home categories={this.state.categories} />
     );
   }
 }
