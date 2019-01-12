@@ -17,3 +17,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.success{
+    color: green;
+}
+
+.wrong{
+    color:red;
+}

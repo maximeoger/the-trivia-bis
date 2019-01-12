@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import "../../styles/index.css";
 
 const Section = styled.section`
 width: 90vw;
@@ -41,7 +42,7 @@ const Home = ({ categories }) => (
     <Logo>QuizzME</Logo>
     <Title>chose a category to start the quizz</Title>
     {categories.length > 0 && (
-      <section>
+      <section className={"list"}>
         {categories.map(category => (
           <Link to={`/category/${category.id}`} key={category.id}>
             <Button>{category.title}</Button>
