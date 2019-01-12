@@ -3,6 +3,10 @@ import asyncFetch from './async-fetch';
 
 class api {
 
+    constructor(){
+        this.baseUrl = API_BASE_URL;
+    }
+
   async getQuestionByCategory(categoryId) {
     const response = await fetch(`http://jservice.io/api/clues?category=${categoryId}`);
     const json = await response.json();
@@ -16,9 +20,10 @@ class api {
     const requestConfig = {
       method: 'GET',
       mode: 'cors'
-    }
-
+    };
+      console.log(requestConfig);
     const parsedData = await asyncFetch(url, requestConfig);
+
 
     return parsedData;
 

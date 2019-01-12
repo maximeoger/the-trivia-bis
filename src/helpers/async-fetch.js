@@ -14,6 +14,6 @@ const asyncFetch = async (url, requestConfig) => {
 
   return data;
 
-}
+};
 
 export default asyncFetch;

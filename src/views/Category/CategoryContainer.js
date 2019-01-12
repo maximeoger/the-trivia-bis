@@ -17,6 +17,7 @@ class CategoryContainer extends Component {
   // async needed when using promise
   async componentDidMount() {
     const data = await api.getCategoryById(this.props.match.params.id);
+    console.log(data);
     // stored response in the state;
       let currentUserAnswer = api.getItem(data.clues[this.state.currentQuestion]);
 
