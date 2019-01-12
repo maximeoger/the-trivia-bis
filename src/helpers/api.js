@@ -3,9 +3,9 @@ import asyncFetch from './async-fetch';
 
 class api {
 
-    constructor(){
-        this.baseUrl = API_BASE_URL;
-    }
+  constructor() {
+    this.baseUrl = API_BASE_URL;
+  }
 
   async getQuestionByCategory(categoryId) {
     const response = await fetch(`http://jservice.io/api/clues?category=${categoryId}`);
@@ -21,7 +21,7 @@ class api {
       method: 'GET',
       mode: 'cors'
     };
-      console.log(requestConfig);
+    console.log(requestConfig);
     const parsedData = await asyncFetch(url, requestConfig);
 
 
@@ -42,6 +42,10 @@ class api {
   getItem(key) {
     let storage = localStorage.getItem(key);
     return storage ? JSON.parse(storage) : [];
+  }
+
+  deleteItem(key) {
+    localStorage.removeItem(key);
   }
 }
 

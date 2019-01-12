@@ -1,62 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Section, Button, Logo, Header, Question, Input } from '../../components/styled-components';
 
-import styled from 'styled-components';
-
-
-const Button = styled.button`
-height: 40px;
-background-color: #fff;
-border-radius: 25px;
-box-shadow: 0 3px 7px #828282;
-padding: 0 30px;
-margin: 16px;
-cursor: pointer;
-color: #828282;
-font-size: 14px;
-transition: box-shadow 0.25s;
-
-&:hover {
-  box-shadow: 0 4px 7px #5D5D5D;
-}
-`
-
-const Category = ({ category, currentQuestionIndex,score, handleSubmit, wrongTry, answerInput,error }) => {
-    const currentQuestion = category.clues[currentQuestionIndex];
+const Category = ({ category, currentQuestionIndex, score, handleSubmit, handleReset, wrongTry, answerInput, error }) => {
+  const currentQuestion = category.clues[currentQuestionIndex];
 
   return (
-    <section>
+    <Section>
+      <Header>
+        <Logo>QuizzME</Logo>
+        <Button onClick={handleReset}>reset score</Button>
+      </Header>
       <form onSubmit={handleSubmit}>
-        <h1>You choosed: {category.title}</h1>
-          <h2>Votre score : {score}</h2>
+        <h1>{category.title}</h1>
+        <p>try to get 10 points</p>
+        <h2>{score}</h2>
         <div className="question">
-            {error !== null ?
-                <div>
-                    {error ? <div className={"success"}>Nice !</div> : <div className={"wrong"}> Wrong</div>}
-                </div>
+          {error !== null ?
+            <div>
+              {error ? <div className={"success"}>Nice !</div> : <div className={"wrong"}> Wrong</div>}
+            </div>
 
-                : ""
-            }
-          <h3 className="question__title">
-            {currentQuestion.question}
-          </h3>
-          <div className="question__answerInput">
+            : ""
+          }
+          <Question>{currentQuestion.question}</Question>
+          <div>
+            <Input ref={answerInput} type="text" name="question" placeholder="write your answer here" />
             {/* We give the ref below in order check the value */}
-            <input ref={answerInput} />
           </div>
 
-            <div>
-                <span>Essai restant : {wrongTry}</span>
-            </div>
-          <button className="question__submit" type="submit">
-            Next
-          </button>
+          <div>
+            <span>you have {wrongTry} attempt(s) left</span>
+          </div>
+          <Header>
+            <Link to={"/"}><Button>change category</Button></Link>
+            <Button type="submit">next</Button>
+          </Header>
         </div>
       </form>
-
-        <Link to={"/"}><Button>Retour</Button></Link>
-    </section>
+    </Section>
   );
 };
 
