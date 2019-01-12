@@ -1,4 +1,8 @@
+import { API_BASE_URL } from './api_base_url';
+import asyncFetch from './async-fetch';
+
 class api {
+
   async getQuestionByCategory(categoryId) {
     const response = await fetch(`http://jservice.io/api/clues?category=${categoryId}`);
     const json = await response.json();
@@ -6,9 +10,18 @@ class api {
   }
 
   async getCategoryById(id) {
-    const response = await fetch(`http://jservice.io/api/category?id=${id}`);
-    const json = await response.json();
-    return json;
+
+    const url = `${this.baseUrl}api/category?id=${id}`;
+
+    const requestConfig = {
+      method: 'GET',
+      mode: 'cors'
+    }
+
+    const parsedData = await asyncFetch(url, requestConfig);
+
+    return parsedData;
+
   }
 
   async getAllCategories() {

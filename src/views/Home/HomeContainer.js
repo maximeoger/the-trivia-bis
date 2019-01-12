@@ -5,9 +5,11 @@ import Home from './Home';
 import api from '../../helpers/api';
 
 class HomeContainer extends Component {
-  state = {
-    categories: [],
-  }
+
+    state = {
+        categories: [],
+      };
+
   async componentDidMount() {
     const categories = api.getAllCategories().then(categories =>
       this.setState({
