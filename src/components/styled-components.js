@@ -13,7 +13,7 @@ font-size: 14px;
 transition: box-shadow 0.25s;
 
 &:hover {
-  box-shadow: 0 4px 7px #5D5D5D;
+  box-shadow: 0 4px 8px #5D5D5D;
 }
 `
 export const Section = styled.section`
