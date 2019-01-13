@@ -3,8 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
 import HomeContainer from '../../views/Home/HomeContainer';
 import CategoryContainer from '../../views/Category/CategoryContainer';
-import GameOverContainer from '../../views/GameOver/GameOverContainer';
-import GameWinContainer from '../../views/GameWin/GameWinContainer';
+import GameEndContainer from '../../views/GameEnd/GameEndContainer';
 
 class App extends Component {
   render() {
@@ -14,8 +13,8 @@ class App extends Component {
           <Fragment>
             <Route exact path="/" component={HomeContainer} />
             <Route path="/category/:id" component={CategoryContainer} />
-            <Route path="/game-over" component={GameOverContainer} />
-            <Route path="/game-win" component={GameWinContainer} />
+            <Route path="/game-over" component={GameEndContainer} />
+            <Route path="/game-win" render={() => <GameEndContainer win={true} />} />
           </Fragment>
         </Router>
       </div>

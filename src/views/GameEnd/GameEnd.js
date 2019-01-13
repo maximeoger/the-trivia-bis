@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom';
 import { Button, Section, Logo, GameOverTitle } from '../../components/styled-components';
 import "../../styles/index.css";
 
-const GameOver = ({ categories }) => (
+const GameEnd = ({ win }) => (
     <Section>
         <Logo>QuizzME</Logo>
-        <GameOverTitle>Game Over</GameOverTitle>
+        <GameOverTitle>{win ? 'You Win' : 'Game Over'}</GameOverTitle>
         <section className={"gameOverSection"}>
-            <p>You're such a loser !</p>
+            <p>You're such a {win ? 'bg' : 'loser'} !</p>
             <Link to={`/`}>
-                <Button>I know... 😞</Button>
+                <Button>I know... {win ? '' : '😞'}</Button>
             </Link>
         </section>
     </Section>
 );
 
-export default GameOver;
+export default GameEnd;
