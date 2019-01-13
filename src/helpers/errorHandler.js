@@ -5,8 +5,6 @@ export class HttpApiCallError extends Error {
     this.code = code;
     this.message = message;
 
-    // création d'une instance de l'objet erreur dans la pile d'erreur
-    this.stack = (new Error(message)).stack;
     this.name = 'HttpApiCallError';
   }
 }

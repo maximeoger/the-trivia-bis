@@ -4,6 +4,7 @@ import Category from './Category';
 import { Redirect } from 'react-router-dom'
 
 class CategoryContainer extends Component {
+
     state = {
         category: null,
         currentQuestion: 0,
@@ -16,8 +17,9 @@ class CategoryContainer extends Component {
 
   // async needed when using promise
   async componentDidMount() {
+
     const data = await api.getCategoryById(this.props.match.params.id);
-    console.log(data);
+
     // stored response in the state;
       let currentUserAnswer = api.getItem(data.clues[this.state.currentQuestion]);
 
@@ -32,7 +34,7 @@ class CategoryContainer extends Component {
   handleSubmit = (e) => {
     // here I prevent the default bh of submitting form
     e.preventDefault();
-    console.log('submitting');
+
     // write logic to handle good/bad answer
       //Récupération de la question en cours
       let currentClues = this.state.category.clues[this.state.currentQuestion];
@@ -62,7 +64,9 @@ class CategoryContainer extends Component {
           });
 
           api.saveItem(this.state.category.id, {'score' : this.state.score, 'lastIndex' : this.state.currentQuestion });
+
       }else{
+
           if(this.state.wrongTry === 0){
               this.redirect();
           }
@@ -73,6 +77,7 @@ class CategoryContainer extends Component {
           this.setState(prevState => {
               prevState.error = false
           });
+
       }
 
     // save in the storage the id of the question

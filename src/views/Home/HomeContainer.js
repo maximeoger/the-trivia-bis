@@ -6,16 +6,18 @@ import api from '../../helpers/api';
 
 class HomeContainer extends Component {
 
-    state = {
-        categories: [],
-      };
+  state = {
+      categories: [],
+  };
 
   async componentDidMount() {
-    const categories = api.getAllCategories().then(categories =>
-      this.setState({
-        categories: categories,
-      })
-    );
+
+    const categories = await api.getAllCategories(100);
+
+    this.setState({
+      categories
+    })
+
   }
 
   render() {
