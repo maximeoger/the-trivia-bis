@@ -1,21 +1,25 @@
-import React, { Component } from 'react';
+import React, {
+  Component
+} from 'react';
 import Home from './Home';
 import api from '../../helpers/api';
 
 class HomeContainer extends Component {
+
   state = {
-    categories: [],
-  }
+      categories: [],
+  };
 
   async componentDidMount() {
-   
-    const categories = await api.getCategories()
+
+    const categories = await api.getAllCategories(100);
 
     this.setState({
-      categories: categories,
+      categories
     })
 
   }
+
   render() {
     return (
       <Home categories={this.state.categories} />
