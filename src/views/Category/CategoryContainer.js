@@ -8,7 +8,7 @@ class CategoryContainer extends Component {
     currentQuestion: 0,
     wrongTry: 3,
     error: null,
-    score : 0
+    score: 0
   };
 
   clues = [];
@@ -43,38 +43,41 @@ class CategoryContainer extends Component {
 
     // Test si la réponse est bonne
     if (currentClues.answer === answer) {
-   
-          //+1 si bonne réponse
+      if (this.state.score === 10) {
+        this.showGameWin();
+      }
+
+      //+1 si bonne réponse
+      this.setState(prevState => {
+        score: prevState.score += 1
+      });
+
+      this.clues[this.state.category.id] = { 'score': this.state.score, 'lastIndex': this.state.currentQuestion };
+
+      for (let key in this.clues) {
+        if (this.clues[key] !== null) {
+          console.log(this.clues[key]);
+          this.setState(prevState => {
+            score: prevState.score += this.clues[key].score;
+          });
+        }
+      }
+
+      api.saveItem("jeu-trivia", this.clues);
+
+      // if no more question, remove category from categories playable
+      if (this.state.category.clues[this.state.currentQuestion + 1] == null) {
+        // increment score somewhere and redirect to /
+        this.redirect();
+      } else {
+
+        // increment currentQuestion
         this.setState(prevState => {
-            score: prevState.score += 1
+          prevState.currentQuestion += 1
+          prevState.error = true
         });
 
-        this.clues[this.state.category.id] = {'score' : this.state.score, 'lastIndex' : this.state.currentQuestion };
-
-        for(let key in this.clues){
-            if(this.clues[key] !== null ){
-                console.log(this.clues[key]);
-                this.setState(prevState => {
-                    score: prevState.score += this.clues[key].score;
-                });
-            }
-        }
-
-        api.saveItem("jeu-trivia" ,  this.clues);
-
-        // if no more question, remove category from categories playable
-        if(this.state.category.clues[this.state.currentQuestion + 1] == null){
-            // increment score somewhere and redirect to /
-            this.redirect();
-        }else{
-
-            // increment currentQuestion
-            this.setState(prevState => {
-                prevState.currentQuestion += 1
-                prevState.error = true
-            });
-
-        }
+      }
     }
     else {
 
@@ -118,6 +121,10 @@ class CategoryContainer extends Component {
 
   showGameOver() {
     this.props.history.push(`/game-over`)
+  }
+
+  showGameWin() {
+    this.props.history.push(`/game-win`)
   }
 
   render() {
