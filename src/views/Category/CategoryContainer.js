@@ -23,7 +23,7 @@ class CategoryContainer extends Component {
 
     // stored response in the state;
     this.clues = api.getItem("jeu-trivia");
-
+    console.log("mount", this.clues)
     this.setState({
       category: data,
       score: 0,
@@ -44,28 +44,35 @@ class CategoryContainer extends Component {
     // Test si la réponse est bonne
     if (currentClues.answer === answer) {
    
-          //+1 si bonne réponse
+        //+1 si bonne réponse
         this.setState(prevState => {
             score: prevState.score += 1
         });
 
-        this.clues[this.state.category.id] = {'score' : this.state.score, 'lastIndex' : this.state.currentQuestion };
+        this.clues[this.state.category.id] = { 'score' : this.state.score, 'lastIndex' : this.state.currentQuestion };
 
+        console.log('bizarrerie :', this.clues[this.state.category.id])
+    
         for(let key in this.clues){
-            if(this.clues[key] !== null ){
+            if(this.clues[key] !== null){
                 console.log(this.clues[key]);
+                
                 this.setState(prevState => {
                     score: prevState.score += this.clues[key].score;
                 });
             }
         }
 
-        api.saveItem("jeu-trivia" ,  this.clues);
+        console.log("this.clues ", this.clues)
+
+        api.saveItem("jeu-trivia", this.clues);
+        
 
         // if no more question, remove category from categories playable
         if(this.state.category.clues[this.state.currentQuestion + 1] == null){
             // increment score somewhere and redirect to /
             this.redirect();
+
         }else{
 
             // increment currentQuestion
