@@ -24,6 +24,13 @@ code {
     justify-content: space-between;
 }
 
+.gameOverSection{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+}
+
 .success{
     color: green;
 }

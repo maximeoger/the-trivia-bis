@@ -66,6 +66,10 @@ class api {
     return storage ? JSON.parse(storage) : [];
 
   }
+
+  deleteItem(key) {
+    localStorage.removeItem(key);
+  }
 }
 
 export default new api();
