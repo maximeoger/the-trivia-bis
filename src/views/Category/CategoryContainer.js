@@ -8,7 +8,7 @@ class CategoryContainer extends Component {
     currentQuestion: 0,
     wrongTry: 3,
     error: null,
-    score: 10
+    score: 0
   };
 
   clues = [];
@@ -26,7 +26,7 @@ class CategoryContainer extends Component {
 
     this.setState({
       category: data,
-      score: 10,
+      score: 0,
     });
 
   }
