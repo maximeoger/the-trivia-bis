@@ -8,8 +8,11 @@ class CategoryContainer extends Component {
         category: null,
         currentQuestion: 0,
         wrongTry : 3,
-        error : null
+        error : null,
+        score : 0
     };
+
+    clues = [];
 
   // createRef in order to bring back input value to its parent
   answerInput = createRef();
@@ -19,12 +22,12 @@ class CategoryContainer extends Component {
     const data = await api.getCategoryById(this.props.match.params.id);
     console.log(data);
     // stored response in the state;
-      let currentUserAnswer = api.getItem(data.clues[this.state.currentQuestion]);
+      //data.clues[this.state.currentQuestion]
+      this.clues = api.getItem("jeu-trivia");
 
     this.setState({
         category: data,
-        score: 0,
-        currentUserAnswer: currentUserAnswer,
+        score: 0
     });
 
   }
@@ -46,41 +49,43 @@ class CategoryContainer extends Component {
               score: prevState.score += 1
           });
 
+          this.clues[this.state.category.id] = {'score' : this.state.score, 'lastIndex' : this.state.currentQuestion };
+
+          for(let key in this.clues){
+              if(this.clues[key] !== null ){
+                  console.log(this.clues[key]);
+                  this.setState(prevState => {
+                      score: prevState.score += this.clues[key].score;
+                  });
+              }
+          }
+
+          api.saveItem("jeu-trivia" ,  this.clues);
+
           // if no more question, remove category from categories playable
           if(this.state.category.clues[this.state.currentQuestion + 1] == null){
               // increment score somewhere and redirect to /
               this.redirect();
+          }else{
+
+              // increment currentQuestion
+              this.setState(prevState => {
+                  prevState.currentQuestion += 1
+                  prevState.error = true
+              });
+
           }
 
-          // increment currentQuestion
-          this.setState(prevState => {
-              prevState.currentQuestion += 1
-          });
 
-          this.setState(prevState => {
-              prevState.error = true
-          });
-
-          api.saveItem(this.state.category.id, {'score' : this.state.score, 'lastIndex' : this.state.currentQuestion });
       }else{
           if(this.state.wrongTry === 0){
               this.redirect();
           }
           this.setState(prevState => {
-              wrongTry: prevState.wrongTry -= 1
-          });
-
-          this.setState(prevState => {
-              prevState.error = false
+              wrongTry: prevState.wrongTry -= 1;
+              prevState.error = false;
           });
       }
-
-    // save in the storage the id of the question
-      let userAnswer = {
-          question : currentClues,
-          answer : answer
-      };
-      //api.saveItem(currentClues.id, JSON.parse(userAnswer));
 
       this.answerInput.current.value = "";
 
@@ -115,3 +120,4 @@ class CategoryContainer extends Component {
 }
 
 export default CategoryContainer;
+

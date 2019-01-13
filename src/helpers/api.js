@@ -21,7 +21,7 @@ class api {
       method: 'GET',
       mode: 'cors'
     };
-      console.log(requestConfig);
+
     const parsedData = await asyncFetch(url, requestConfig);
 
 
