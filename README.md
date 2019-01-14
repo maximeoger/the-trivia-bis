@@ -3,7 +3,8 @@
 
 ### Pour installer le projet :
 
-cloner le répo
+1- git clone 
 
-$ npm install
-$ npm start
+2- run :
+`$ npm install`
+`$ npm start`
