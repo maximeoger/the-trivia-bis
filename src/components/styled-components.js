@@ -38,6 +38,12 @@ font-size: 3em;
 color: red;
 `
 
+export const GameWinTitle = styled.h1`
+margin: 60px;
+font-size: 3em;
+color: green;
+`
+
 export const Header = styled.div`
 display: flex;
 justify-content: space-between;

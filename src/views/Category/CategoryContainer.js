@@ -8,26 +8,42 @@ class CategoryContainer extends Component {
     currentQuestion: 0,
     wrongTry: 3,
     error: null,
-    score : 0
+    score: 0
   };
 
-  clues = [];
+  clues = {};
 
   // createRef in order to bring back input value to its parent
   answerInput = createRef();
 
   // async needed when using promise
   async componentDidMount() {
-
+    
     const data = await api.getCategoryById(this.props.match.params.id);
 
     // stored response in the state;
     this.clues = api.getItem("jeu-trivia");
-    console.log("mount", this.clues)
+
     this.setState({
       category: data,
-      score: 0,
+      score: this.clues[data.id] ? this.clues[data.id].score : 0,
     });
+
+  }
+
+  componentDidUpdate(prevState){
+
+    const {currentQuestion, score} = this.state;
+
+    if(prevState.currentQuestion !== currentQuestion || prevState.score !== score){
+
+      this.clues = {
+        ...this.clues,
+        [this.state.category.id]: { 'score': this.state.score, 'lastIndex': this.state.currentQuestion }
+      }
+
+      api.saveItem("jeu-trivia", this.clues);
+    }
 
   }
 
@@ -43,47 +59,31 @@ class CategoryContainer extends Component {
 
     // Test si la réponse est bonne
     if (currentClues.answer === answer) {
-   
-        //+1 si bonne réponse
+        
+      if (this.state.score === 10) {
+        this.showGameWin();
+      }
+
+      this.setState(prevState => {
+        score: prevState.score += 1;
+      });
+
+      // if no more question, remove category from categories playable
+      if (this.state.category.clues[this.state.currentQuestion + 1] == null) {
+        // increment score somewhere and redirect to /
+        this.redirect();
+
+      } else {
+
+        // increment currentQuestion
         this.setState(prevState => {
-            score: prevState.score += 1
+          prevState.currentQuestion += 1
+          prevState.error = true
         });
 
-        this.clues[this.state.category.id] = { 'score' : this.state.score, 'lastIndex' : this.state.currentQuestion };
+      }
 
-        console.log('bizarrerie :', this.clues[this.state.category.id])
-    
-        for(let key in this.clues){
-            if(this.clues[key] !== null){
-                console.log(this.clues[key]);
-                
-                this.setState(prevState => {
-                    score: prevState.score += this.clues[key].score;
-                });
-            }
-        }
-
-        console.log("this.clues ", this.clues)
-
-        api.saveItem("jeu-trivia", this.clues);
-        
-
-        // if no more question, remove category from categories playable
-        if(this.state.category.clues[this.state.currentQuestion + 1] == null){
-            // increment score somewhere and redirect to /
-            this.redirect();
-
-        }else{
-
-            // increment currentQuestion
-            this.setState(prevState => {
-                prevState.currentQuestion += 1
-                prevState.error = true
-            });
-
-        }
-    }
-    else {
+    } else {
 
       if (this.state.wrongTry === 1) {
         this.showGameOver();
@@ -96,6 +96,7 @@ class CategoryContainer extends Component {
       this.setState(prevState => {
         prevState.error = false
       });
+
     }
 
     // save in the storage the id of the question
@@ -103,6 +104,7 @@ class CategoryContainer extends Component {
       question: currentClues,
       answer: answer
     };
+
     //api.saveItem(currentClues.id, JSON.parse(userAnswer));
 
     this.answerInput.current.value = "";
@@ -120,11 +122,21 @@ class CategoryContainer extends Component {
   }
 
   redirect() {
-    this.props.history.push(`/`)
+
+    this.props.history.push(`/`);
+
   }
 
   showGameOver() {
-    this.props.history.push(`/game-over`)
+
+    this.props.history.push(`/game-over`);
+
+  }
+
+  showGameWin() {
+
+    this.props.history.push(`/game-win`);
+
   }
 
   render() {
