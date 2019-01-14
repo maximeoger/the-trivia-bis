@@ -1,4 +1,7 @@
-git clone :
+
+### To install the project, follow these instructions:
+
+### git clone :
 ```
 https://github.com/maximeoger/the-trivia-bis/
 ```
