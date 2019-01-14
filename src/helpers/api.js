@@ -51,6 +51,7 @@ class api {
     const parsedData = await asyncFetch(url, requestConfig);
 
     return parsedData;
+    
   }
 
   saveItem(key, item) {
@@ -64,6 +65,12 @@ class api {
     let storage = localStorage.getItem(key);
 
     return storage ? JSON.parse(storage) : [];
+
+  }
+
+  deleteItem(key) {
+
+    localStorage.removeItem(key);
 
   }
 }

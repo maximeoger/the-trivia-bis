@@ -1,33 +1,49 @@
 import React, { Component, createRef } from 'react';
 import api from '../../helpers/api';
 import Category from './Category';
-import { Redirect } from 'react-router-dom'
 
 class CategoryContainer extends Component {
+  state = {
+    category: null,
+    currentQuestion: 0,
+    wrongTry: 3,
+    error: null,
+    score: 0
+  };
 
-    state = {
-        category: null,
-        currentQuestion: 0,
-        wrongTry : 3,
-        error : null
-    };
+  clues = {};
 
   // createRef in order to bring back input value to its parent
   answerInput = createRef();
 
   // async needed when using promise
   async componentDidMount() {
-
+    
     const data = await api.getCategoryById(this.props.match.params.id);
 
     // stored response in the state;
-      let currentUserAnswer = api.getItem(data.clues[this.state.currentQuestion]);
+    this.clues = api.getItem("jeu-trivia");
 
     this.setState({
-        category: data,
-        score: 0,
-        currentUserAnswer: currentUserAnswer,
+      category: data,
+      score: this.clues[data.id] ? this.clues[data.id].score : 0,
     });
+
+  }
+
+  componentDidUpdate(prevState){
+
+    const {currentQuestion, score} = this.state;
+
+    if(prevState.currentQuestion !== currentQuestion || prevState.score !== score){
+
+      this.clues = {
+        ...this.clues,
+        [this.state.category.id]: { 'score': this.state.score, 'lastIndex': this.state.currentQuestion }
+      }
+
+      api.saveItem("jeu-trivia", this.clues);
+    }
 
   }
 
@@ -36,69 +52,95 @@ class CategoryContainer extends Component {
     e.preventDefault();
 
     // write logic to handle good/bad answer
-      //Récupération de la question en cours
-      let currentClues = this.state.category.clues[this.state.currentQuestion];
-      //récupération de la réponse dans l'input
-      const answer = this.answerInput.current.value;
+    // Récupération de la question en cours
+    let currentClues = this.state.category.clues[this.state.currentQuestion];
+    // Récupération de la réponse dans l'input
+    const answer = this.answerInput.current.value;
 
-      //Test si la réponse est bonne
-      if(currentClues.answer === answer){
-          //+1 si bonne réponse
-          this.setState(prevState => {
-              score: prevState.score += 1
-          });
+    // Test si la réponse est bonne
+    if (currentClues.answer === answer) {
+        
+      if (this.state.score === 10) {
+        this.showGameWin();
+      }
 
-          // if no more question, remove category from categories playable
-          if(this.state.category.clues[this.state.currentQuestion + 1] == null){
-              // increment score somewhere and redirect to /
-              this.redirect();
-          }
+      this.setState(prevState => {
+        score: prevState.score += 1;
+      });
 
-          // increment currentQuestion
-          this.setState(prevState => {
-              prevState.currentQuestion += 1
-          });
+      // if no more question, remove category from categories playable
+      if (this.state.category.clues[this.state.currentQuestion + 1] == null) {
+        // increment score somewhere and redirect to /
+        this.redirect();
 
-          this.setState(prevState => {
-              prevState.error = true
-          });
+      } else {
 
-          api.saveItem(this.state.category.id, {'score' : this.state.score, 'lastIndex' : this.state.currentQuestion });
-
-      }else{
-
-          if(this.state.wrongTry === 0){
-              this.redirect();
-          }
-          this.setState(prevState => {
-              wrongTry: prevState.wrongTry -= 1
-          });
-
-          this.setState(prevState => {
-              prevState.error = false
-          });
+        // increment currentQuestion
+        this.setState(prevState => {
+          prevState.currentQuestion += 1
+          prevState.error = true
+        });
 
       }
 
+    } else {
+
+      if (this.state.wrongTry === 1) {
+        this.showGameOver();
+      }
+
+      this.setState(prevState => {
+        wrongTry: prevState.wrongTry -= 1
+      });
+
+      this.setState(prevState => {
+        prevState.error = false
+      });
+
+    }
+
     // save in the storage the id of the question
-      let userAnswer = {
-          question : currentClues,
-          answer : answer
-      };
-      //api.saveItem(currentClues.id, JSON.parse(userAnswer));
+    let userAnswer = {
+      question: currentClues,
+      answer: answer
+    };
 
-      this.answerInput.current.value = "";
+    //api.saveItem(currentClues.id, JSON.parse(userAnswer));
 
-      this.forceUpdate();
+    this.answerInput.current.value = "";
+
+    this.forceUpdate();
     // check if answer is equal to the requested answer from the current question
   }
 
-    redirect() {
-        this.props.history.push(`/`)
-    }
+  handleReset = () => {
+
+    api.deleteItem('jeu-trivia');
+
+    this.redirect();
+
+  }
+
+  redirect() {
+
+    this.props.history.push(`/`);
+
+  }
+
+  showGameOver() {
+
+    this.props.history.push(`/game-over`);
+
+  }
+
+  showGameWin() {
+
+    this.props.history.push(`/game-win`);
+
+  }
 
   render() {
-    const { category, currentQuestion,score,wrongTry,error } = this.state;
+    const { category, currentQuestion, score, wrongTry, error } = this.state;
 
     // at first render, category will be null so we need to wait
     // before using data.
@@ -109,6 +151,7 @@ class CategoryContainer extends Component {
         category={category}
         currentQuestionIndex={currentQuestion}
         handleSubmit={this.handleSubmit}
+        handleReset={this.handleReset}
         wrongTry={wrongTry}
         score={score}
         error={error}
@@ -120,3 +163,4 @@ class CategoryContainer extends Component {
 }
 
 export default CategoryContainer;
+
